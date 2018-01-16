@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<HBox xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="reversifx.GameController" fx:id="root" spacing="10">
+    <VBox spacing="10">
+        <Text text="Current Player:"/>
+        <Text fx:id = "currentPlayer"></Text>
+        <Text text="player 1:"/>
+        <Text fx:id = "p1Score"></Text>
+        <Text text="player 2:"/>
+        <Text fx:id = "p2Score"></Text>
+    </VBox>
+</HBox>
+
