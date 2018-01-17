@@ -33,16 +33,16 @@ public class GameLogic {
         int col = move.getY();
         List<Element> validMoves = getValidMoves(currentPlayer, board);
         if (!validMoves.isEmpty()) {
-            if (checkIfContains(row, col, validMoves)) {
-                // we have a destination,
-                // now find all possible origins and conquer the
-                // elements on the way
+            if (checkIfContains(move, validMoves)) {
+                // if the move is a valid move - we have a destination,
+                // now find all possible origins and conquer the elements on
+                // the way
                 boolean firstReverse = true;
                 // going over all directions
                 for (int directionX = -1; directionX < 2; directionX++) {
                     for (int directionY = -1; directionY < 2; directionY++) {
-                        // skip [0,0]
                         if (!(directionX == 0 && directionY == 0)) {
+                            // skip [0,0]
                             conquerInDirection(row + directionX, col + directionY,
                                     directionX, directionY, currentPlayer, firstReverse);
                         }
@@ -52,25 +52,19 @@ public class GameLogic {
                 board.setElement(row, col, currentPlayer.getToken());
 
                 if (getValidMoves(nextPlayer, board).isEmpty()) {
+                    // if the other player doesn't have any valid moves - check
+                    // the boolean
                     onePlayerOutOfTurns = true;
                     if (getValidMoves(currentPlayer, board).isEmpty()) {
+                        // if the other player doesn't have any valid moves
+                        // nor does the curret player have any valid moves - the
+                        // game is over
                         bothPlayersOutOfTurns = true;
                     }
                     refreshPlayersPieces();
                     return true;
                 }
-                refreshPlayersPieces();
-                swapPlayers();
-                return true;
-            }
-        } else {
-            if (onePlayerOutOfTurns) {
-                bothPlayersOutOfTurns = true;
-                refreshPlayersPieces();
-                swapPlayers();
-                return true;
-            } else {
-                onePlayerOutOfTurns = true;
+                onePlayerOutOfTurns = false; // the other player has valid moves
                 refreshPlayersPieces();
                 swapPlayers();
                 return true;
@@ -89,16 +83,22 @@ public class GameLogic {
     }
 
     public String declareWinner() {
-        currentPlayer.refreshNumberOfPieces(board);
-        nextPlayer.refreshNumberOfPieces(board);
-        if (currentPlayer.getNumberOfPieces() > nextPlayer.getNumberOfPieces()) {
+        // refresh the number of pieces for each player
+        refreshPlayersPieces();
+        
+        if (currentPlayer.getNumberOfPieces()
+                > nextPlayer.getNumberOfPieces()) {
+            // if currentPlayer has more pieces than the other player
             if (nextPlayer.getNumberOfPieces() == 0) {
+                // if the other player has 0 pieces
                 return currentPlayer.getName() + " wins! FLAWLESS VICTORY";
             }
             return currentPlayer.getName() + " wins!";
         } else if (nextPlayer.getNumberOfPieces()
                 > currentPlayer.getNumberOfPieces()) {
+            // if the other player has more pieces than currentPlayer
             if (currentPlayer.getNumberOfPieces() == 0) {
+                // if currentPlayer has 0 pieces
                 return nextPlayer.getName() + " wins! FLAWLESS VICTORY";
             }
             return nextPlayer.getName() + " wins!";
@@ -107,24 +107,30 @@ public class GameLogic {
         }
     }
 
-    public boolean checkIfContains(int row, int col, List<Element> validMoves) {
+    public boolean checkIfContains(Element move, List<Element> validMoves) {
         // go over all possible moves and check if the player entered a valid
         // destination
-        for (int i = 0; i < validMoves.size(); i++) {
-            if (row == validMoves.get(i).getX()
-                    && col == validMoves.get(i).getY()) {
+        for (Element validMove : validMoves) {
+            if (move.getX() == validMove.getX()
+                    && move.getY() == validMove.getY()) {
                 return true;
             }
         }
+        // if didn't return true - the move isn't contained in validmoves
         return false;
     }
 
     public List<Element> getValidMoves(Player p, Board board) {
         List<Element> validMoves = new ArrayList<>();
+
         for (int row = 0; row < board.getSize(); row++) {
             for (int col = 0; col < board.getSize(); col++) {
+                // go over the board
                 if (board.getElement(row, col) == ' ') {
+                    // if an element is empty
                     if (isValidMove(row, col, p)) {
+                        // check if the element is a valid move, if so - add it
+                        // to the list of valid moves
                         Element validMove = new Element(row, col);
                         validMoves.add(validMove);
                     }

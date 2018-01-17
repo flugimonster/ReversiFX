@@ -13,9 +13,9 @@
         <Text text="Current Player:"/>
         <Text fx:id = "currentPlayer"></Text>
         <Text text="player 1:"/>
-        <Text fx:id = "p1Score"></Text>
+        <Text fx:id = "playerOneScore"></Text>
         <Text text="player 2:"/>
-        <Text fx:id = "p2Score"></Text>
+        <Text fx:id = "playerTwoScore"></Text>
     </VBox>
 </HBox>
 

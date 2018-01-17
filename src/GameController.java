@@ -20,10 +20,10 @@ public class GameController implements Initializable {
     private HBox root;
 
     @FXML
-    protected Text p1Score;
+    protected Text playerOneScore;
 
     @FXML
-    protected Text p2Score;
+    protected Text playerTwoScore;
 
     @FXML
     protected Text currentPlayer;
@@ -32,27 +32,31 @@ public class GameController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
+        
         String boardSize;
         String playsFirst;
         String playerOneColor;
         String playerTwoColor;
+        
         try (BufferedReader br = new BufferedReader(new FileReader("gameSettings.txt"))) {
             StringBuilder sb = new StringBuilder();
-            boardSize = br.readLine();
-            playsFirst = br.readLine();
-            playerOneColor = br.readLine();
-            playerTwoColor = br.readLine();
+            boardSize = br.readLine(); // first line is the size of the board
+            playsFirst = br.readLine(); // second line is who plays first
+            playerOneColor = br.readLine(); // third line is the color of p1
+            playerTwoColor = br.readLine(); // fourth line is the color of p2
             br.close();
         } catch (Exception e) {
-            boardSize = "8";
-            playsFirst = "player 1";
-            playerOneColor = "ffffff";
-            playerTwoColor = "000000";
+            // if failed to read from the line for any reason - use the default
+            // settings which are:
+            boardSize = "8"; // an 8 by 8 board
+            playsFirst = "player 1"; // player 1 goes first
+            playerOneColor = "ffffff"; // player 1 is white
+            playerTwoColor = "000000"; // player 2 is black
         }
 
+        // create a new board using the chosen size
         board = new Board(Integer.parseInt(boardSize));
-
+        
         BoardController bc = new BoardController(board, this, playsFirst,
                 playerOneColor, playerTwoColor);
         bc.setPrefWidth(400);
@@ -71,12 +75,10 @@ public class GameController implements Initializable {
         });
     }
 
-    public void updateStats(String cp, int p1, int p2) {
-        String p1s = Integer.toString(p1);
-        String p2s = Integer.toString(p2);
-        currentPlayer.setText(cp);
-        p1Score.setText(p1s);
-        p2Score.setText(p2s);
+    public void updateStats(String cp, int p1Score, int p2Score) {
+        this.currentPlayer.setText(cp);
+        this.playerOneScore.setText(Integer.toString(p1Score));
+        this.playerTwoScore.setText(Integer.toString(p2Score));
     }
 
 }

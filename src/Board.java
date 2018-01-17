@@ -17,7 +17,9 @@ public class Board {
     public Board(int boardSize) {
         this.size = boardSize;
         this.board = new char[size][size];
+        // put spaces in every cell
         resetBoard();
+        // put X's and O's in the correct spaces at the start of the game
         setBoard();
     }
 
